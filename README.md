@@ -8,7 +8,7 @@ This is an excellent visual example of how they work.. http://setosa.io/ev/marko
 
 ## Info
 
-`tweets.txt` is holds more than 30,000 of his tweets going back to 2009. Sourced from http://trumptwitterarchive.com/.
+`tweets.txt` holds more than 30,000 of his tweets going back to 2009. Sourced from http://trumptwitterarchive.com/.
 
 `generatengrams.js` generates a set of ngrams(2) in the format of a markov chain. This is saved as `tweetngrams.json`.
 
