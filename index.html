@@ -11,7 +11,6 @@
             }
             img{
                 width: 50px;
-                border-radius: 50%;
                 padding: 8px;
             }
             #v{
@@ -20,12 +19,14 @@
                 padding: 0px;
             }
             .twitContainer{
-                display: flex;
                 border: 1px #ccc solid;
                 border-radius: 6px;
                 padding:10px;
                 padding-left: 20px;
                 padding-right: 20px;
+            }
+            .export{
+                display: flex;
             }
             #tweet{
                 display: block;
@@ -36,17 +37,17 @@
                 text-align: center;
                 font-size: 2.5em;
             }
-            #button{
+            .button{
                 background-color: #a14da0;
                 border-radius: 6px;
                 padding: 10px;
                 color:white;
-                margin: auto;
-                display: block;
                 text-align: center;
                 margin-top: 2em;
                 font-weight: bold;
                 cursor: pointer;
+                display:inline-block;
+                width:40%;
             }
             span{
                 font-size: 0.9em;
@@ -57,27 +58,44 @@
                 color:#657786;
                 font-size: 0.9em;
             }
-
+            .buttonContainer{
+                margin: auto;
+                display: block;
+                text-align: center;
+            }
             .about{
                 margin-top: 5em;
+            }
+            h3{
+                text-align: center;
+                font-weight: 100;
+                color: #657786;
+                font-size: 0.9em;
+                margin-top: -1.2em;
+                margin-bottom: 2em;
             }
         </style>
     </head>
 
     <body>
         <h1>Trump hasn't tweeted...</h1>
+        <h3>Generating Trumps future tweets based on his last 30,000.</h3>
         <div class="twitContainer">
-            <div class="author">
-                <img src="web/trumpFace.jpg">
-            </div>
-            <div class="tweet">
-                <span style="font-weight: bold;">Donald J. Trump <img id="v" src="web/verified.png"> </span>
-                <span style="color:#657786">@realDonaldTrump</span>
-                <span id="tweet"></span>
+            <div class="export">
+                <div class="author">
+                    <img style="border-radius: 50px;" src="web/trumpFace.jpg">
+                </div>
+                <div class="tweet">
+                    <span style="font-weight: bold;">Donald J. Trump <img id="v" src="web/verified.png"> </span>
+                    <span style="color:#657786">@realDonaldTrump</span>
+                    <span id="tweet"></span>
+                </div>
             </div>
         </div> 
-        <a id="button" onclick="generate()">Give me another</a>
-
+        <div class="buttonContainer">
+            <a class="button" id="genButton" onclick="generate()">Generate</a>
+            <a class="button" style="display:none;" id="downloadLink" download="tweet.png">Download</a>
+        </div>
         <div class="about">
             <h4>How does this work?</h4>
             <p>We use every Tweet he has posted to guess the probability of the next word. Unfortunately it isn't super accurate and doesn't exactly provide us with "natural language", but neither does Trump, so in this case it's mostly fine.</p>
@@ -86,6 +104,7 @@
 
 
         </div>
+        <script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
         <script>
 
             function loadJSON(callback) {   
@@ -103,11 +122,12 @@
             var dataset;
 
             function init() {
-                document.getElementById("button").innerText = "Loading...";
+                document.querySelector("#genButton").innerText = "Loading...";
                 loadJSON(function(response) {
                 // Parsing JSON string into object
                     dataset = JSON.parse(response);
-                    document.getElementById("button").innerText = "More";
+                    document.querySelector("#genButton").innerText = "Generate";
+                    document.querySelector("#downloadLink").style.display = "inline-block";
                     generate();
                 });
                 
@@ -127,6 +147,9 @@
 
             function generate(){
                 document.getElementById("tweet").innerText = tweet();
+                html2canvas(document.querySelector(".export"),{"scrollY":-28, "scrollX":-5}).then(canvas => {
+                    document.querySelector("#downloadLink").href = canvas.toDataURL();
+                });
             }
 
             function tweet(){
