@@ -139,7 +139,7 @@
                     for(var i = 0; i < dataset.length; i++){
                         if(dataset[i].word == currentWord){
                             nextWord = dataset[i].followedBy[Math.floor(Math.random() * dataset[i].followedBy.length)]
-                            if(nextWord.includes("&amp;"){
+                            if(nextWord.includes("&amp;")){
                                 nextWord = "&";
                             }
                         }
