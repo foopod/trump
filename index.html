@@ -1,15 +1,90 @@
 <html>
     <head>
         <title>Things Trump hasn't Tweeted yet.</title>
+        <meta charset="UTF-8">
+        <style>
+            body{
+                margin:auto;
+                display: block;
+                padding: 10px;
+            }
+            img{
+                width: 50px;
+                border-radius: 50%;
+                padding: 10px;
+            }
+            #v{
+                height:13px;
+                width: 15px;
+                padding: 0px;
+            }
+            .twitContainer{
+                display: flex;
+                border: 1px #ccc solid;
+                border-radius: 6px;
+                padding:10px;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+            #tweet{
+                display: block;
+                font-size: 1.5em;
+            }
+            h1{
+                font-weight: 100;
+                text-align: center;
+                font-size: 2.5em;
+            }
+            #button{
+                background-color: #a14da0;
+                border-radius: 6px;
+                padding: 10px;
+                color:white;
+                margin: auto;
+                display: block;
+                text-align: center;
+                margin-top: 2em;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            span{
+                font-size: 0.9em;
+            }
+            .hmm{
+                font-weight: 100;
+                margin-top: -1em;
+                color:#657786;
+                font-size: 0.9em;
+            }
 
-<meta charset="UTF-8">
-
+            .about{
+                margin-top: 5em;
+            }
+        </style>
     </head>
 
     <body>
-        <h1>Things Trump hasn't Tweeted yet.</h1>
-        <h2 id="tweet"></h2>
-        <a id="button" onclick="generate()">Generate</a>
+        <h1>Trump hasn't tweeted...</h1>
+        <div class="twitContainer">
+            <div class="author">
+                <img src="web/trumpFace.jpg">
+            </div>
+            <div class="tweet">
+                <span style="font-weight: bold;">Donald J. Trump <img id="v" src="web/verified.png"> </span>
+                <span style="color:#657786">@realDonaldTrump</span>
+                <span id="tweet"></span>
+            </div>
+        </div> 
+        <a id="button" onclick="generate()">Give me another</a>
+
+        <div class="about">
+            <h4>How does this work?</h4>
+            <p>We use every Tweet he has posted to guess the probability of the next word. Unfortunately it isn't super accurate and doesn't exactly provide us with "natural language", but neither does Trump, so in this case it's mostly fine.</p>
+
+            <p> The source code is available <a href="https://github.com/foopod/trump">here</a>.</p>
+
+
+        </div>
         <script>
 
             function loadJSON(callback) {   
@@ -31,11 +106,13 @@
                 loadJSON(function(response) {
                 // Parsing JSON string into object
                     dataset = JSON.parse(response);
-                    console.log("DONE");
+                    document.getElementById("button").innerText = "More";
+                    generate();
                 });
-                document.getElementById("button").innerText = "Generate";
+                
             }
             init();
+            
 
             function chooseStart(){
                 var done = false;
