@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <title>Things Trump hasn't Tweeted yet.</title>
+
+<meta charset="UTF-8">
+
+    </head>
+
+    <body>
+        <h1>Things Trump hasn't Tweeted yet.</h1>
+        <h2 id="tweet"></h2>
+        <a id="button" onclick="generate()">Generate</a>
+        <script>
+
+            function loadJSON(callback) {   
+                var xobj = new XMLHttpRequest();
+                xobj.overrideMimeType("application/json");
+                xobj.open('GET', 'tweetngrams.json', true); // Replace 'appDataServices' with the path to your file
+                xobj.onreadystatechange = function () {
+                    if (xobj.readyState == 4 && xobj.status == "200") {
+                        // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                        callback(xobj.responseText);
+                    }
+                };
+                xobj.send(null);  
+            }
+            var dataset;
+
+            function init() {
+                document.getElementById("button").innerText = "Loading...";
+                loadJSON(function(response) {
+                // Parsing JSON string into object
+                    dataset = JSON.parse(response);
+                    console.log("DONE");
+                });
+                document.getElementById("button").innerText = "Generate";
+            }
+            init();
+
+            function chooseStart(){
+                var done = false;
+                while(!done){
+                    var word = dataset[Math.floor(Math.random() * dataset.length)].word;
+                    if(word.slice(-1) != "." && word.slice(-1) != "\""){
+                        return word;
+                    }
+                }
+            }
+
+            function generate(){
+                document.getElementById("tweet").innerText = tweet();
+            }
+
+            function tweet(){
+                var sentence = chooseStart();
+                var currentWord = sentence;
+
+                var finished = false;
+                while(!finished){
+                    var nextWord  = "";
+                    for(var i = 0; i < dataset.length; i++){
+                        if(dataset[i].word == currentWord){
+                            nextWord = dataset[i].followedBy[Math.floor(Math.random() * dataset[i].followedBy.length)]
+                        }
+                    }
+                    sentence += " " +nextWord;
+                    currentWord = nextWord;
+                    if(currentWord.slice(-1) == "." || currentWord.slice(-1) == "!"){
+                        finished = true;
+                    }
+                }
+                return sentence;
+            }
+        </script>
+    </body>
+</html>
