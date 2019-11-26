@@ -24,7 +24,8 @@ rd.on('line', function(line) {
     var words = line.split(" ");
     for(var i = 0; i <words.length-1; i++){
         var found = false;
-        if(isAllowed(words[i])){
+        if(isAllowed(words[i]) && isAllowed(words[i+1])){
+            words[i].replace(/['"]+/g, '');
             for(var j = 0; j < dataset.length; j++){
                 if(dataset[j].word == words[i]){
                     dataset[j].followedBy.push(words[i+1]);
