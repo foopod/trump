@@ -147,7 +147,7 @@
 
             function generate(){
                 document.getElementById("tweet").innerText = tweet();
-                html2canvas(document.querySelector(".export"),{"scrollY":-28, "scrollX":-5}).then(canvas => {
+                html2canvas(document.querySelector(".export"),{"scrollY":-28, "scrollX":-5, "logging": false}).then(canvas => {
                     document.querySelector("#downloadLink").href = canvas.toDataURL();
                 });
             }
