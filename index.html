@@ -121,7 +121,6 @@
                 };
                 xobj.onprogress = function (e) {
                     document.getElementById("tweet").innerText = "Patience. Just downloading everything I ever said. It won't happen again I swear. " + Math.floor(e.loaded/1000) + "/" + Math.floor(e.total/1000);
-                    console.log(e);
                 };
                 xobj.send(null);  
             }
@@ -152,15 +151,27 @@
             }
 
             function generate(){
-                document.getElementById("tweet").innerText = tweet();
+                document.getElementById("tweet").innerHTML = tweet();
                 html2canvas(document.querySelector(".export"),{"logging": false}).then(canvas => {
                     document.querySelector("#downloadLink").href = canvas.toDataURL();
                 });
             }
 
+            function style(word){
+                var tmp = word;
+                if(word.includes("&amp;")){
+                    tmp = "&";
+                }
+                if(word.startsWith("@") || word.startsWith("#")){
+                    tmp = "<span style='color:#1B95E0;font-size:1em;'>" + word + "</span>";
+                }
+                return tmp;
+            }
+
             function tweet(){
-                var sentence = chooseStart();
-                var currentWord = sentence;
+                var currentWord = chooseStart();
+                var sentence = style(currentWord);
+
 
                 var finished = false;
                 while(!finished){
@@ -168,12 +179,9 @@
                     for(var i = 0; i < dataset.length; i++){
                         if(dataset[i].word == currentWord){
                             nextWord = dataset[i].followedBy[Math.floor(Math.random() * dataset[i].followedBy.length)]
-                            if(nextWord.includes("&amp;")){
-                                nextWord = "&";
-                            }
                         }
                     }
-                    sentence += " " +nextWord;
+                    sentence += " " + style(nextWord);
                     currentWord = nextWord;
                     if(currentWord.slice(-1) == "." || currentWord.slice(-1) == "!"){
                         finished = true;
