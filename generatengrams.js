@@ -25,17 +25,15 @@ rd.on('line', function(line) {
     for(var i = 0; i <words.length-1; i++){
         var found = false;
         if(isAllowed(words[i]) && isAllowed(words[i+1])){
-            if((words[i].split("”").length - 1) != 2){
-                words[i].replace("'", '');
-                words[i].replace("\"", '');
-                words[i].replace("”", '');
-                if(words[i].startsWith(".")){
-                    words[i].replace(".", '');
-                }
+            words[i] = words[i].replace("'", '');
+            words[i] = words[i].replace('"', '');
+            words[i] = words[i].replace("”", '');
+            if(words[i].startsWith(".")){
+                words[i] = words[i].replace(".", '');
             }
             if(!(words[i].includes("(") && words[i].includes(")"))){
-                words[i].replace("(", '');
-                words[i].replace(")", '');
+                words[i] = words[i].replace("(", '');
+                words[i] = words[i].replace(")", '');
             }
             for(var j = 0; j < dataset.length; j++){
                 if(dataset[j].word == words[i]){
