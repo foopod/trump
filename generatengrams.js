@@ -17,14 +17,13 @@ function isAllowed(word){
     return true;
 }
 
-var dataset = [];
-var data = {"followedBy": []};
+var dataset = {};
 
 rd.on('line', function(line) {
     var words = line.split(" ");
-    for(var i = 0; i <words.length-1; i++){
+    for(var i = 0; i <words.length-2; i++){
         var found = false;
-        if(isAllowed(words[i]) && isAllowed(words[i+1])){
+        if(isAllowed(words[i]) && isAllowed(words[i+1]) && isAllowed(words[i+2])){
             words[i] = words[i].replace("'", '');
             words[i] = words[i].replace('"', '');
             words[i] = words[i].replace("”", '');
@@ -35,23 +34,20 @@ rd.on('line', function(line) {
                 words[i] = words[i].replace("(", '');
                 words[i] = words[i].replace(")", '');
             }
-            for(var j = 0; j < dataset.length; j++){
-                if(dataset[j].word == words[i]){
-                    dataset[j].followedBy.push(words[i+1]);
-                    // console.log("old word");
-                    found = true;
-                }
+            if(dataset[words[i] + " " + words[i+1]]){
+                dataset[words[i] + " " + words[i+1]].push(words[i+2]);
+                found = true;
             }
             if(!found){
-                dataset.push({"word": words[i], "followedBy": [words[i+1]]});
-                // console.log("new word");
+                dataset[words[i] + " " + words[i+1]]=[words[i+2]];
             }
         }
     }
+   
 });
 
 rd.on('close', function() {
-    fs.writeFile('tweetngrams.json', JSON.stringify(dataset), function(e){
-        console.log("done");
+    fs.writeFile('tweetngrams.json',JSON.stringify(dataset), function(e){
+        console.log(e);
     });
 });
